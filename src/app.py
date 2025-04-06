@@ -40,11 +40,14 @@ while cap.isOpened():
     # Verifica objetos abandonados com base na distância das pessoas
     alerts = update_abandonment_status(tracked_objects, person_centers)
 
+    abandoned_ids = {alert["id"] for alert in alerts}  # collect abandoned IDs
+
     for alert in alerts:
         print(f"🚨 ALERTA: Objeto ID {alert['id']} abandonado por {alert['time']:.1f}s")
 
-    # Desenha caixas e rótulos
-    annotated = draw_annotations(frame, tracked_objects, labels)
+    # draw with highlights
+    annotated = draw_annotations(frame, tracked_objects, labels, abandoned_ids)
+
 
     # Exibe o resultado
     cv2.imshow("Intelligent Surveillance", annotated)

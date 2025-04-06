@@ -1,12 +1,9 @@
-import cv2
+import supervision as sv
 
-def draw_detections(frame, detections):
-    for det in detections:
-        x1, y1, x2, y2 = det["bbox"]
-        label = f"{det['label']} ({det['confidence']:.2f})"
-        color = (50, 255, 200)
+bounding_box_annotator = sv.BoundingBoxAnnotator()
+label_annotator = sv.LabelAnnotator()
 
-        cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
-        cv2.putText(frame, label, (x1, y1 - 10),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
+def draw_annotations(frame, detections, labels):
+    frame = bounding_box_annotator.annotate(scene=frame.copy(), detections=detections)
+    frame = label_annotator.annotate(scene=frame, detections=detections, labels=labels)
     return frame
